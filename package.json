@@ -1,0 +1,14 @@
+{
+  "name": "hwk2-objective-labyrinth",
+  "version": "1.0.0",
+  "description": "",
+  "main": "build/app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/node": "^8.5.2"
+  }
+}
