@@ -1,7 +1,13 @@
 import { Command, CommandParser } from './Parser';
+import Labyrinth from './Labyrinth';
+const data = require('./../labyrinths.json');
 
 class Game {
-    constructor() {}
+    private labyrinth: Labyrinth;
+
+    constructor() {
+        this.labyrinth = new Labyrinth(data.labyrinths[0]);
+    }
 
     public play() {
         let parser = new CommandParser(this.handleInput);
