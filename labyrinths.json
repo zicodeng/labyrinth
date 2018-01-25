@@ -2,7 +2,25 @@
     "labyrinths": [
         {
             "name": "Pan's Labyrinth",
-            "desc": "Brave live...coward die..."
+            "desc": "Brave live...coward die...",
+            "areas": [
+                {
+                    "name": "Dark Forest",
+                    "desc": "You are standing in a dark forest. All you can see is the endless darkness."
+                },
+                {
+                    "name": "Area 2",
+                    "desc": "You are in Area 2..."
+                },
+                {
+                    "name": "Area 3",
+                    "desc": "You are in Area 3..."
+                },
+                {
+                    "name": "Area 4",
+                    "desc": "You are in Area 4..."
+                }
+            ]
         }
     ]
 }
