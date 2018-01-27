@@ -20,7 +20,11 @@
                     "name": "Area 4",
                     "desc": "You are in Area 4..."
                 }
-            ]
+            ],
+            "character": {
+                "name": "Odin",
+                "desc": "young and reckless"
+            }
         }
     ]
 }

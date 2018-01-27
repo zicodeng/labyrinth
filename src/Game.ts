@@ -10,6 +10,8 @@ class Game {
     }
 
     public play() {
+        this.labyrinth.greeting();
+        this.labyrinth.promptAvailableDirections();
         let parser = new CommandParser(this.handleInput);
         console.log('Input a command:');
         parser.start();
