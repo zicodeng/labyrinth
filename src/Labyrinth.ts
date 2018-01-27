@@ -83,10 +83,6 @@ class Labyrinth {
         return this.character.getPosition();
     }
 
-    public setCharacterPosition(newPosition: Coordinate): void {
-        this.character.setPosition(newPosition);
-    }
-
     private getCharacterCurrentArea(): Area {
         const pos = this.character.getPosition();
         return this.areas[pos.x][pos.y];
@@ -145,6 +141,42 @@ class Labyrinth {
             console.log('No such item in your pocket.');
             this.character.printPocket();
         }
+    }
+
+    public moveCharacter(direction: string): void {
+        const d = direction.toLowerCase().trim();
+        const surr = this.getCharacterSurroundings();
+        if (!surr.hasOwnProperty(direction)) {
+            console.log('You cannot go that direction.');
+            this.promptAvailableDirections();
+            return;
+        }
+        this.setCharacterPosition(d);
+    }
+
+    private setCharacterPosition(direction: string): void {
+        const newPos = this.getCharacterCurrentPosition();
+        switch (direction) {
+            case 'north':
+                newPos.x += 1;
+                break;
+
+            case 'east':
+                newPos.y++;
+                break;
+
+            case 'south':
+                newPos.x--;
+                break;
+
+            case 'west':
+                newPos.y--;
+                break;
+
+            default:
+                break;
+        }
+        this.character.setPosition(newPos);
     }
 
     public getCharacterSurroundings(): Surroundings {

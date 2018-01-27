@@ -44,6 +44,11 @@ class Game {
                 this.labyrinth.printCharacterPocket();
                 break;
 
+            case Command.GO:
+                this.labyrinth.moveCharacter(arg);
+                this.gameLoop();
+                break;
+
             default:
                 break;
         }
