@@ -1,15 +1,23 @@
 import Area from './Area';
+import Item from './Item';
 
 export interface LabyrinthData {
     name: string;
     desc: string;
     areas: AreaData[];
+    items: ItemData[];
     character: CharacterData;
 }
 
 export interface AreaData {
     name: string;
     desc: string;
+}
+
+export interface ItemData {
+    name: string;
+    desc: string;
+    useDesc: string;
 }
 
 interface CharacterData {
@@ -32,3 +40,5 @@ export interface Surroundings {
     // implicitly has type 'any' error.
     [key: string]: Area | null;
 }
+
+export type Pocket = Map<string, Item>;

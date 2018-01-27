@@ -21,6 +21,23 @@
                     "desc": "You are in Area 4..."
                 }
             ],
+            "items": [
+                {
+                    "name": "Flashlight",
+                    "desc": "There is a flashlight on the ground.",
+                    "useDesc": "You turn on the flashlight. Now you can see!"
+                },
+                {
+                    "name": "Item 2",
+                    "desc": "Item 2 desc...",
+                    "useDesc": "You used item 2..."
+                },
+                {
+                    "name": "Item 3",
+                    "desc": "Item 3 desc...",
+                    "useDesc": "You used item 3..."
+                }
+            ],
             "character": {
                 "name": "Odin",
                 "desc": "young and reckless"
