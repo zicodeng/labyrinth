@@ -1,0 +1,12 @@
+TAKE Flashlight
+GO East
+USE Flashlight
+TAKE Pepper Spray
+GO South
+TAKE Boat
+GO West
+USE Boat
+TAKE Aegis
+GO East
+USE Pepper Spray
+

@@ -1,6 +1,6 @@
 import { Command, CommandParser } from './Parser';
 import Labyrinth from './Labyrinth';
-const data = require('./../labyrinths.json');
+const data = require('./../labyrinth.json');
 
 class Game {
     private labyrinth: Labyrinth;
@@ -9,7 +9,7 @@ class Game {
     );
 
     constructor() {
-        this.labyrinth = new Labyrinth(data.labyrinths[0]);
+        this.labyrinth = new Labyrinth(data);
     }
 
     public play() {
@@ -41,9 +41,12 @@ class Game {
                 break;
 
             case Command.USE:
-                if (this.labyrinth.characterUseItem(arg)) {
-                    this.labyrinth.printCharacterCurrentAreaItemDesc();
-                    this.labyrinth.promptAvailableDirections();
+                this.labyrinth.characterUseItem(arg);
+                if (
+                    this.labyrinth.getCharacterCurrentAreaName() ===
+                    'Labyrinth Exit'
+                ) {
+                    return this.onExit();
                 }
                 break;
 
@@ -59,14 +62,17 @@ class Game {
                     return true;
                 }
 
-                if (!this.labyrinth.validateMove(arg)) {
+                const direction = arg.toLowerCase().trim();
+                if (!this.labyrinth.validateMove(direction)) {
                     return true;
                 }
-                this.labyrinth.setCharacterPosition(arg);
+                this.labyrinth.moveCharacter(direction);
                 this.labyrinth.moveMonster();
+
                 this.enterNewArea();
 
                 if (this.labyrinth.encounterMonster()) {
+                    this.labyrinth.printMonster();
                     if (this.labyrinth.canKillMonster()) {
                         console.log(
                             'Seems like you have an appropriate item to take this monster down.'
@@ -79,27 +85,27 @@ class Game {
                     }
                 }
 
-                if (
-                    this.labyrinth
-                        .getCharacterCurrentAreaName()
-                        .toLocaleLowerCase() === 'exit'
-                ) {
-                    if (this.labyrinth.checkForWin()) {
-                        console.log(
-                            `${this.labyrinth.getCharacterName()}! Congrats, you have found the treasure! You will be honored!`
-                        );
-                        return false;
-                    }
-                    console.log(
-                        'Seems like you have not found the treasure yet. A true hero will not quit unless he/she finds the treasure.'
-                    );
-                }
-
-                break;
+                return this.onExit();
 
             default:
                 break;
         }
+        return true;
+    }
+
+    private onExit(): boolean {
+        if (
+            this.labyrinth.getCharacterCurrentAreaName() === 'Labyrinth Exit' &&
+            this.labyrinth.checkForWin()
+        ) {
+            console.log(
+                `${this.labyrinth.getCharacterName()}! Congrats, you have found the treasure! You will be honored!`
+            );
+            return false;
+        }
+        console.log(
+            'Seems like you have not found the treasure yet. A true hero will not quit unless he/she finds the treasure.'
+        );
         return true;
     }
 }

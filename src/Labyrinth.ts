@@ -157,7 +157,7 @@ class Labyrinth {
         area.removeItem();
     }
 
-    public characterUseItem(itemName: string): boolean {
+    public characterUseItem(itemName: string) {
         const itemNameLowerCase = itemName.toLowerCase().trim();
         const pocket = this.character.getPocket();
         const item = pocket.get(itemNameLowerCase);
@@ -170,19 +170,23 @@ class Labyrinth {
             ) {
                 this.character.useItem(item);
                 this.getCharacterCurrentArea().removeHazard();
-                return true;
-            } else if (this.encounterMonster()) {
+
+                this.printCharacterCurrentAreaItemDesc();
+                this.promptAvailableDirections();
+                return;
+            }
+
+            if (this.encounterMonster()) {
                 this.character.useItem(item);
                 this.monster = null;
-                return true;
-            } else {
-                console.log('You cannot use this item here.');
+                return;
             }
+
+            console.log('You cannot use this item here.');
         } else {
             console.log('No such item found in your pocket.');
             this.character.printPocket();
         }
-        return false;
     }
 
     public validateMove(direction: string): boolean {
@@ -196,7 +200,7 @@ class Labyrinth {
         return true;
     }
 
-    public setCharacterPosition(direction: string): void {
+    public moveCharacter(direction: string): void {
         const newPos = this.character.getPosition();
         switch (direction) {
             case 'north':
@@ -274,9 +278,7 @@ class Labyrinth {
     public checkForWin(): boolean {
         const treasure = 'aegis';
         if (
-            this.getCharacterCurrentArea()
-                .getName()
-                .toLowerCase() === 'exit' &&
+            this.getCharacterCurrentArea().getName() === 'Labyrinth Exit' &&
             this.character.getPocket().has(treasure)
         ) {
             return true;
@@ -311,14 +313,10 @@ class Labyrinth {
         }
         const characterPos = this.character.getPosition();
         const monsterPos = this.monster.getPosition();
-        if (
-            characterPos.x === monsterPos.x &&
-            characterPos.y === monsterPos.y
-        ) {
-            this.printMonster();
-            return true;
-        }
-        return false;
+
+        return (
+            characterPos.x === monsterPos.x && characterPos.y === monsterPos.y
+        );
     }
 
     public canKillMonster(): boolean {
@@ -326,7 +324,7 @@ class Labyrinth {
         return pocket.has('pepper spray');
     }
 
-    private printMonster(): void {
+    public printMonster(): void {
         if (!this.monster) {
             return;
         }

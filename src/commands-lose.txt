@@ -1,0 +1,5 @@
+TAKE Flashlight
+GO East
+Use Flashlight
+GO West
+GO South
