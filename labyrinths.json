@@ -28,14 +28,19 @@
                     "useDesc": "You turned on the flashlight. Now you can see!"
                 },
                 {
-                    "name": "Boat",
-                    "desc": "There is a small boat parking near you.",
-                    "useDesc": "You sat on the boat. Now you can paddle around."
+                    "name": "Pepper Spray",
+                    "desc": "There is a pepper spray on the ground.",
+                    "useDesc": "You used your pepper spray on the monster. The monster is fleeing away in panic."
                 },
                 {
                     "name": "Aegis",
                     "desc": "This is...AEGIS!!!...an invaluable gift Zeus gave to Athena. You have found the treasure!!!",
                     "useDesc": "May the Olympian Gods and Goddesses bless you."
+                },
+                {
+                    "name": "Boat",
+                    "desc": "There is a small boat parking near you.",
+                    "useDesc": "You sat on the boat. Now you can paddle around."
                 }
             ],
             "character": {
