@@ -14,7 +14,7 @@
                 },
                 {
                     "name": "Deadly Swamp",
-                    "desc": "Help...Help...Help...You cannot move unless you have a boat."
+                    "desc": "Help...Help...Help...You are stuck in the swamp and cannot move unless you have a boat."
                 },
                 {
                     "name": "Exit",
@@ -33,7 +33,7 @@
                     "useDesc": "You sat on the boat. Now you can paddle around."
                 },
                 {
-                    "name": "The Aegis",
+                    "name": "Aegis",
                     "desc": "This is...AEGIS!!!...an invaluable gift Zeus gave to Athena. You have found the treasure!!!",
                     "useDesc": "May the Olympian Gods and Goddesses bless you."
                 }

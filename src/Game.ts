@@ -72,7 +72,7 @@ class Game {
                 ) {
                     if (this.labyrinth.checkForWin()) {
                         console.log(
-                            `${this.labyrinth.getCharacterName()}! Congrats, you have found the treasure! Your name will be honored!`
+                            `${this.labyrinth.getCharacterName()}! Congrats, you have found the treasure! You will be honored!`
                         );
                         return false;
                     }

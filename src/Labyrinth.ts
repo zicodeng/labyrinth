@@ -264,11 +264,12 @@ class Labyrinth {
     }
 
     public checkForWin(): boolean {
+        const treasure = 'aegis';
         if (
             this.getCharacterCurrentArea()
                 .getName()
                 .toLowerCase() === 'exit' &&
-            this.character.getPocket().has('The Aegis')
+            this.character.getPocket().has(treasure)
         ) {
             return true;
         }

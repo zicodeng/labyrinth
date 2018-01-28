@@ -49,7 +49,7 @@ class Character {
     }
 
     private removeItem(item: Item) {
-        this.pocket.delete(item.getName());
+        this.pocket.delete(item.getName().toLocaleLowerCase());
     }
 }
 
