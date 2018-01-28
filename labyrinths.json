@@ -25,23 +25,35 @@
                 {
                     "name": "Flashlight",
                     "desc": "There is a flashlight on the ground.",
-                    "useDesc": "You turn on the flashlight. Now you can see!"
+                    "useDesc": "You turned on the flashlight. Now you can see!"
                 },
                 {
-                    "name": "Item 2",
-                    "desc": "Item 2 desc...",
-                    "useDesc": "You used item 2..."
+                    "name": "Boat",
+                    "desc": "There is a small boat parking near you.",
+                    "useDesc": "You sat on the boat. Now you can paddle around."
                 },
                 {
-                    "name": "Item 3",
-                    "desc": "Item 3 desc...",
-                    "useDesc": "You used item 3..."
+                    "name": "The Aegis",
+                    "desc": "This is...AEGIS!!!...an invaluable gift Zeus gave to Athena. You have found the treasure!!!",
+                    "useDesc": "May the Olympian Gods and Goddesses bless you."
                 }
             ],
             "character": {
                 "name": "Odin",
                 "desc": "young and reckless"
-            }
+            },
+            "hazards": [
+                {
+                    "name": "darkness",
+                    "desc": "You cannot even see your own fingers in such darkness!",
+                    "removeBy": "Flashlight"
+                },
+                {
+                    "name": "river",
+                    "desc": "I need a small boat to across the river.",
+                    "removeBy": "Boat"
+                }
+            ]
         }
     ]
 }

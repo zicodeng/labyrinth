@@ -1,19 +1,21 @@
 import Item from './Item';
+import Hazard from './Hazard';
 
 class Area {
     private item: Item | null = null;
+    private hazard: Hazard | null = null;
 
     constructor(private name: string, private desc: string) {}
 
-    public getName() {
+    public getName(): string {
         return this.name;
     }
 
-    public getDesc() {
+    public getDesc(): string {
         return this.desc;
     }
 
-    public addItem(item: Item) {
+    public addItem(item: Item): void {
         this.item = item;
     }
 
@@ -23,6 +25,18 @@ class Area {
 
     public removeItem(): void {
         this.item = null;
+    }
+
+    public addHazard(hazard: Hazard): void {
+        this.hazard = hazard;
+    }
+
+    public getHazard(): Hazard | null {
+        return this.hazard;
+    }
+
+    public removeHazard(): void {
+        this.hazard = null;
     }
 }
 

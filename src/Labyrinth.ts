@@ -2,11 +2,12 @@ import Area from './Area';
 import {
     LabyrinthData,
     ItemData,
-    Coordinate,
-    Surroundings
+    Surroundings,
+    HazardData
 } from './interfaces';
 import Character from './Character';
 import Item from './Item';
+import Hazard from './Hazard';
 
 class Labyrinth {
     private name: string;
@@ -36,20 +37,18 @@ class Labyrinth {
             }
             areas.push(row);
         }
-        const areasWithItems = this.addItemsToAreas(
-            size,
-            areas,
-            labyrinthData.items
-        );
-        return areasWithItems;
+
+        this.addItemsToAreas(size, areas, labyrinthData.items);
+        this.addHazardsToAreas(areas, labyrinthData.hazards);
+
+        return areas;
     }
 
     private addItemsToAreas(
         size: number,
         areas: Area[][],
         itemData: ItemData[]
-    ): Area[][] {
-        const areasWithItems = areas;
+    ) {
         for (let i = 0; i < itemData.length; i++) {
             const currItemData = itemData[i];
             areas[Math.floor(i / size)][i % size].addItem(
@@ -60,7 +59,25 @@ class Labyrinth {
                 )
             );
         }
-        return areasWithItems;
+    }
+
+    private addHazardsToAreas(areas: Area[][], hazardData: HazardData[]) {
+        // Hard-coded hazard positions.
+        // This can be improved in the future by randomly adding hazards to different areas.
+        areas[0][1].addHazard(
+            new Hazard(
+                hazardData[0].name,
+                hazardData[0].desc,
+                hazardData[0].removeBy
+            )
+        );
+        areas[1][0].addHazard(
+            new Hazard(
+                hazardData[1].name,
+                hazardData[1].desc,
+                hazardData[1].removeBy
+            )
+        );
     }
 
     public getName(): string {
@@ -79,10 +96,6 @@ class Labyrinth {
         return this.character.getDesc();
     }
 
-    public getCharacterCurrentPosition(): Coordinate {
-        return this.character.getPosition();
-    }
-
     private getCharacterCurrentArea(): Area {
         const pos = this.character.getPosition();
         return this.areas[pos.x][pos.y];
@@ -96,12 +109,12 @@ class Labyrinth {
         return this.getCharacterCurrentArea().getDesc();
     }
 
-    private getCharacterCurrentAreaItem(): Item | null {
-        return this.getCharacterCurrentArea().getItem();
+    public getCharacterCurrentAreaHazard(): Hazard | null {
+        return this.getCharacterCurrentArea().getHazard();
     }
 
     public printCharacterCurrentAreaItemDesc(): void {
-        const item = this.getCharacterCurrentAreaItem();
+        const item = this.getCharacterCurrentArea().getItem();
         if (item) {
             console.log(item.getDesc());
         }
@@ -117,7 +130,7 @@ class Labyrinth {
     }
 
     public characterTakeItem(itemName: string): void {
-        const item = this.getCharacterCurrentAreaItem();
+        const item = this.getCharacterCurrentArea().getItem();
         if (
             !item ||
             itemName.toLocaleLowerCase() !== item.getName().toLocaleLowerCase()
@@ -125,40 +138,57 @@ class Labyrinth {
             return;
         }
         this.character.addItem(item);
-        console.log(`You took ${item.getName()} and put it in your pocket.`);
+        console.log(
+            `You took the ${item.getName()} and put it in your pocket.`
+        );
 
         const area = this.getCharacterCurrentArea();
         area.removeItem();
     }
 
-    public characterUseItem(itemName: string) {
+    public characterUseItem(itemName: string): boolean {
         const itemNameLowerCase = itemName.toLowerCase().trim();
         const pocket = this.character.getPocket();
         const item = pocket.get(itemNameLowerCase);
         if (item) {
-            this.character.useItem(item);
+            const hazard = this.getCharacterCurrentAreaHazard();
+            if (
+                hazard &&
+                item.getName().toLowerCase() ===
+                    hazard.getRemoveBy().toLowerCase()
+            ) {
+                this.character.useItem(item);
+                this.getCharacterCurrentArea().removeHazard();
+                return true;
+            } else {
+                console.log('You cannot use this item here.');
+            }
         } else {
-            console.log('No such item in your pocket.');
+            console.log('No such item found in your pocket.');
             this.character.printPocket();
         }
+        return false;
     }
 
-    public moveCharacter(direction: string): void {
+    // If this move is successful, return true;
+    // otherwise, return false.
+    public moveCharacter(direction: string): boolean {
         const d = direction.toLowerCase().trim();
         const surr = this.getCharacterSurroundings();
-        if (!surr.hasOwnProperty(direction)) {
+        if (!surr[d]) {
             console.log('You cannot go that direction.');
             this.promptAvailableDirections();
-            return;
+            return false;
         }
         this.setCharacterPosition(d);
+        return true;
     }
 
     private setCharacterPosition(direction: string): void {
-        const newPos = this.getCharacterCurrentPosition();
+        const newPos = this.character.getPosition();
         switch (direction) {
             case 'north':
-                newPos.x += 1;
+                newPos.x--;
                 break;
 
             case 'east':
@@ -166,7 +196,7 @@ class Labyrinth {
                 break;
 
             case 'south':
-                newPos.x--;
+                newPos.x++;
                 break;
 
             case 'west':

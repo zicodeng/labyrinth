@@ -19,14 +19,18 @@ class Game {
 
     private gameLoop() {
         this.labyrinth.printCharacterCurrentArea();
-        this.labyrinth.printCharacterCurrentAreaItemDesc();
-        this.labyrinth.promptAvailableDirections();
+        const hazard = this.labyrinth.getCharacterCurrentAreaHazard();
+        if (hazard) {
+            console.log(hazard.getDesc());
+        } else {
+            this.labyrinth.printCharacterCurrentAreaItemDesc();
+            this.labyrinth.promptAvailableDirections();
+        }
         console.log('What would you like to do?');
         this.parser.start();
     }
 
     private handleInput(cmd: Command, arg: string): boolean {
-        console.log('Handling', cmd, "with argument '" + arg + "'");
         switch (cmd) {
             case Command.TAKE:
                 this.labyrinth.characterTakeItem(arg);
@@ -37,7 +41,10 @@ class Game {
                 break;
 
             case Command.USE:
-                this.labyrinth.characterUseItem(arg);
+                if (this.labyrinth.characterUseItem(arg)) {
+                    this.labyrinth.printCharacterCurrentAreaItemDesc();
+                    this.labyrinth.promptAvailableDirections();
+                }
                 break;
 
             case Command.INVENTORY:
@@ -45,8 +52,14 @@ class Game {
                 break;
 
             case Command.GO:
-                this.labyrinth.moveCharacter(arg);
-                this.gameLoop();
+                const hazard = this.labyrinth.getCharacterCurrentAreaHazard();
+                if (hazard) {
+                    console.log(hazard.getDesc());
+                    return true;
+                }
+                if (this.labyrinth.moveCharacter(arg)) {
+                    this.gameLoop();
+                }
                 break;
 
             default:

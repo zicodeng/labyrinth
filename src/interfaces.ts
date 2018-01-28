@@ -6,6 +6,7 @@ export interface LabyrinthData {
     desc: string;
     areas: AreaData[];
     items: ItemData[];
+    hazards: HazardData[];
     character: CharacterData;
 }
 
@@ -18,6 +19,12 @@ export interface ItemData {
     name: string;
     desc: string;
     useDesc: string;
+}
+
+export interface HazardData {
+    name: string;
+    desc: string;
+    removeBy: string;
 }
 
 interface CharacterData {
