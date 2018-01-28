@@ -6,15 +6,15 @@
             "areas": [
                 {
                     "name": "Entrance",
-                    "desc": "You are standing in the labyrinth entrance. A brave adventurer will not step back in horror."
+                    "desc": "You are standing in the labyrinth entrance. A brave adventurer will never step back in horror."
                 },
                 {
                     "name": "Dark Forest",
                     "desc": "You are standing in a dark forest. All you can see is the endless darkness."
                 },
                 {
-                    "name": "Deadly Swamp",
-                    "desc": "Help...Help...Help...You are stuck in the swamp and cannot move unless you have a boat."
+                    "name": "Silent Hill",
+                    "desc": "Absolute silence. Seems like no one would ever want to live in such a creepy place."
                 },
                 {
                     "name": "Exit",
@@ -30,7 +30,7 @@
                 {
                     "name": "Pepper Spray",
                     "desc": "There is a pepper spray on the ground.",
-                    "useDesc": "You used your pepper spray on the monster. The monster is fleeing away in panic."
+                    "useDesc": "You used your pepper spray on the monster. The monster fled away in panic."
                 },
                 {
                     "name": "Aegis",
@@ -43,22 +43,27 @@
                     "useDesc": "You sat on the boat. Now you can paddle around."
                 }
             ],
-            "character": {
-                "name": "Odin",
-                "desc": "young and reckless"
-            },
+
             "hazards": [
                 {
-                    "name": "darkness",
+                    "name": "Darkness",
                     "desc": "You cannot even see your own fingers in such darkness!",
                     "removeBy": "Flashlight"
                 },
                 {
-                    "name": "river",
-                    "desc": "I need a small boat to across the river.",
+                    "name": "Deadly Swamp",
+                    "desc": "Help...Help...Help...You are stuck in the swamp and cannot move unless you have a boat.",
                     "removeBy": "Boat"
                 }
-            ]
+            ],
+            "character": {
+                "name": "Odin",
+                "desc": "young and reckless"
+            },
+            "monster": {
+                "name": "Pale Man",
+                "desc": "a creepy monster with eyes on his hands."
+            }
         }
     ]
 }

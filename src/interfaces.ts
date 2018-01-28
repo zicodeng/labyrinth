@@ -8,6 +8,7 @@ export interface LabyrinthData {
     items: ItemData[];
     hazards: HazardData[];
     character: CharacterData;
+    monster: MonsterData;
 }
 
 export interface AreaData {
@@ -28,6 +29,11 @@ export interface HazardData {
 }
 
 interface CharacterData {
+    name: string;
+    desc: string;
+}
+
+export interface MonsterData {
     name: string;
     desc: string;
 }

@@ -3,24 +3,39 @@ import {
     LabyrinthData,
     ItemData,
     Surroundings,
-    HazardData
+    HazardData,
+    Coordinate
 } from './interfaces';
 import Character from './Character';
 import Item from './Item';
 import Hazard from './Hazard';
+import Monster from './Monster';
 
 class Labyrinth {
     private name: string;
     private desc: string;
     private areas: Area[][];
     private character: Character;
+    private monster: Monster | null;
 
     constructor(labyrinthData: LabyrinthData) {
         this.name = labyrinthData.name;
         this.desc = labyrinthData.desc;
         this.areas = this.createLabyrinthAreas(labyrinthData);
-        const characterData = labyrinthData.character;
-        this.character = new Character(characterData.name, characterData.desc);
+        this.character = new Character(
+            labyrinthData.character.name,
+            labyrinthData.character.desc
+        );
+
+        const monsterPos: Coordinate = {
+            x: this.areas.length - 1,
+            y: this.areas.length - 1
+        };
+        this.monster = new Monster(
+            labyrinthData.monster.name,
+            labyrinthData.monster.desc,
+            monsterPos
+        );
     }
 
     private createLabyrinthAreas(labyrinthData: LabyrinthData): Area[][] {
@@ -38,20 +53,16 @@ class Labyrinth {
             areas.push(row);
         }
 
-        this.addItemsToAreas(size, areas, labyrinthData.items);
+        this.addItemsToAreas(areas, labyrinthData.items);
         this.addHazardsToAreas(areas, labyrinthData.hazards);
 
         return areas;
     }
 
-    private addItemsToAreas(
-        size: number,
-        areas: Area[][],
-        itemData: ItemData[]
-    ) {
+    private addItemsToAreas(areas: Area[][], itemData: ItemData[]) {
         for (let i = 0; i < itemData.length; i++) {
             const currItemData = itemData[i];
-            areas[Math.floor(i / size)][i % size].addItem(
+            areas[Math.floor(i / areas.length)][i % areas.length].addItem(
                 new Item(
                     currItemData.name,
                     currItemData.desc,
@@ -160,6 +171,10 @@ class Labyrinth {
                 this.character.useItem(item);
                 this.getCharacterCurrentArea().removeHazard();
                 return true;
+            } else if (this.encounterMonster()) {
+                this.character.useItem(item);
+                this.monster = null;
+                return true;
             } else {
                 console.log('You cannot use this item here.');
             }
@@ -181,14 +196,7 @@ class Labyrinth {
         return true;
     }
 
-    // If this move is successful, return true;
-    // otherwise, return false.
-    public moveCharacter(direction: string): boolean {
-        this.setCharacterPosition(direction);
-        return true;
-    }
-
-    private setCharacterPosition(direction: string): void {
+    public setCharacterPosition(direction: string): void {
         const newPos = this.character.getPosition();
         switch (direction) {
             case 'north':
@@ -274,6 +282,57 @@ class Labyrinth {
             return true;
         }
         return false;
+    }
+
+    // Monster moves in a clockwise direction.
+    public moveMonster(): void {
+        if (!this.monster) {
+            return;
+        }
+        const newPos = this.monster.getPosition();
+        if (newPos.y > 0 && newPos.x === this.areas.length - 1) {
+            newPos.y--;
+        } else if (newPos.x > 0) {
+            newPos.x--;
+        } else if (newPos.y < this.areas.length - 1) {
+            newPos.y++;
+        } else {
+            newPos.x++;
+        }
+        this.monster.setPosition(newPos);
+    }
+
+    // Returns true if the character encounters the monster
+    // and has an appropriate item to kill the monster.
+    // Otherwise, returns false.
+    public encounterMonster(): boolean {
+        if (!this.monster) {
+            return false;
+        }
+        const characterPos = this.character.getPosition();
+        const monsterPos = this.monster.getPosition();
+        if (
+            characterPos.x === monsterPos.x &&
+            characterPos.y === monsterPos.y
+        ) {
+            this.printMonster();
+            return true;
+        }
+        return false;
+    }
+
+    public canKillMonster(): boolean {
+        const pocket = this.character.getPocket();
+        return pocket.has('pepper spray');
+    }
+
+    private printMonster(): void {
+        if (!this.monster) {
+            return;
+        }
+        console.log(
+            `You encountered ${this.monster.getName()}, ${this.monster.getDesc()}`
+        );
     }
 }
 

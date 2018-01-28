@@ -13,9 +13,9 @@ class Game {
     }
 
     public play() {
-        this.parser.start();
         this.labyrinth.greeting();
         this.enterNewArea();
+        this.parser.start();
     }
 
     private enterNewArea() {
@@ -62,8 +62,22 @@ class Game {
                 if (!this.labyrinth.validateMove(arg)) {
                     return true;
                 }
-                this.labyrinth.moveCharacter(arg);
+                this.labyrinth.setCharacterPosition(arg);
+                this.labyrinth.moveMonster();
                 this.enterNewArea();
+
+                if (this.labyrinth.encounterMonster()) {
+                    if (this.labyrinth.canKillMonster()) {
+                        console.log(
+                            'Seems like you have an appropriate item to take this monster down.'
+                        );
+                        return true;
+                    } else {
+                        console.log('You are eaten by the monster.');
+                        console.log('GAME OVER');
+                        return false;
+                    }
+                }
 
                 if (
                     this.labyrinth
