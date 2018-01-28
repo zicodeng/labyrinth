@@ -13,11 +13,12 @@ class Game {
     }
 
     public play() {
+        this.parser.start();
         this.labyrinth.greeting();
-        this.gameLoop();
+        this.enterNewArea();
     }
 
-    private gameLoop() {
+    private enterNewArea() {
         this.labyrinth.printCharacterCurrentArea();
         const hazard = this.labyrinth.getCharacterCurrentAreaHazard();
         if (hazard) {
@@ -27,7 +28,6 @@ class Game {
             this.labyrinth.promptAvailableDirections();
         }
         console.log('What would you like to do?');
-        this.parser.start();
     }
 
     private handleInput(cmd: Command, arg: string): boolean {
@@ -52,14 +52,35 @@ class Game {
                 break;
 
             case Command.GO:
+                // Prevent character from moving when a hazard is present.
                 const hazard = this.labyrinth.getCharacterCurrentAreaHazard();
                 if (hazard) {
                     console.log(hazard.getDesc());
                     return true;
                 }
-                if (this.labyrinth.moveCharacter(arg)) {
-                    this.gameLoop();
+
+                if (!this.labyrinth.validateMove(arg)) {
+                    return true;
                 }
+                this.labyrinth.moveCharacter(arg);
+                this.enterNewArea();
+
+                if (
+                    this.labyrinth
+                        .getCharacterCurrentAreaName()
+                        .toLocaleLowerCase() === 'exit'
+                ) {
+                    if (this.labyrinth.checkForWin()) {
+                        console.log(
+                            `${this.labyrinth.getCharacterName()}! Congrats, you have found the treasure! Your name will be honored!`
+                        );
+                        return false;
+                    }
+                    console.log(
+                        'Seems like you have not found the treasure yet. A true hero will not quit unless he/she finds the treasure.'
+                    );
+                }
+
                 break;
 
             default:

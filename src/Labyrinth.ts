@@ -96,7 +96,7 @@ class Labyrinth {
         return this.character.getDesc();
     }
 
-    private getCharacterCurrentArea(): Area {
+    public getCharacterCurrentArea(): Area {
         const pos = this.character.getPosition();
         return this.areas[pos.x][pos.y];
     }
@@ -170,9 +170,7 @@ class Labyrinth {
         return false;
     }
 
-    // If this move is successful, return true;
-    // otherwise, return false.
-    public moveCharacter(direction: string): boolean {
+    public validateMove(direction: string): boolean {
         const d = direction.toLowerCase().trim();
         const surr = this.getCharacterSurroundings();
         if (!surr[d]) {
@@ -180,7 +178,13 @@ class Labyrinth {
             this.promptAvailableDirections();
             return false;
         }
-        this.setCharacterPosition(d);
+        return true;
+    }
+
+    // If this move is successful, return true;
+    // otherwise, return false.
+    public moveCharacter(direction: string): boolean {
+        this.setCharacterPosition(direction);
         return true;
     }
 
@@ -257,6 +261,18 @@ class Labyrinth {
                 this.name
             }`
         );
+    }
+
+    public checkForWin(): boolean {
+        if (
+            this.getCharacterCurrentArea()
+                .getName()
+                .toLowerCase() === 'exit' &&
+            this.character.getPocket().has('The Aegis')
+        ) {
+            return true;
+        }
+        return false;
     }
 }
 
