@@ -5,20 +5,20 @@
             "desc": "Brave live...coward die...",
             "areas": [
                 {
+                    "name": "Entrance",
+                    "desc": "You are standing in the labyrinth entrance. A brave adventurer will not step back in horror."
+                },
+                {
                     "name": "Dark Forest",
                     "desc": "You are standing in a dark forest. All you can see is the endless darkness."
                 },
                 {
-                    "name": "Area 2",
-                    "desc": "You are in Area 2..."
+                    "name": "Deadly Swamp",
+                    "desc": "Help...Help...Help...You cannot move unless you have a boat."
                 },
                 {
-                    "name": "Area 3",
-                    "desc": "You are in Area 3..."
-                },
-                {
-                    "name": "Area 4",
-                    "desc": "You are in Area 4..."
+                    "name": "Exit",
+                    "desc": "You are now reached the end of the labyrinth. Hopefully you have found the treasure."
                 }
             ],
             "items": [
