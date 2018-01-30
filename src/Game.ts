@@ -63,11 +63,9 @@ class Game {
                 }
 
                 const direction = arg.toLowerCase().trim();
-                if (!this.labyrinth.validateMove(direction)) {
+                if (!this.labyrinth.move(direction)) {
                     return true;
                 }
-                this.labyrinth.moveCharacter(direction);
-                this.labyrinth.moveMonster();
 
                 this.enterNewArea();
 

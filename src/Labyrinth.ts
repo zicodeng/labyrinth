@@ -1,11 +1,5 @@
 import Area from './Area';
-import {
-    LabyrinthData,
-    ItemData,
-    Surroundings,
-    HazardData,
-    Coordinate
-} from './interfaces';
+import { LabyrinthData, ItemData, HazardData, Coordinate } from './interfaces';
 import Character from './Character';
 import Item from './Item';
 import Hazard from './Hazard';
@@ -189,72 +183,8 @@ class Labyrinth {
         }
     }
 
-    public validateMove(direction: string): boolean {
-        const d = direction.toLowerCase().trim();
-        const surr = this.getCharacterSurroundings();
-        if (!surr[d]) {
-            console.log('You cannot go that direction.');
-            this.promptAvailableDirections();
-            return false;
-        }
-        return true;
-    }
-
-    public moveCharacter(direction: string): void {
-        const newPos = this.character.getPosition();
-        switch (direction) {
-            case 'north':
-                newPos.x--;
-                break;
-
-            case 'east':
-                newPos.y++;
-                break;
-
-            case 'south':
-                newPos.x++;
-                break;
-
-            case 'west':
-                newPos.y--;
-                break;
-
-            default:
-                break;
-        }
-        this.character.setPosition(newPos);
-    }
-
-    public getCharacterSurroundings(): Surroundings {
-        const pos = this.character.getPosition();
-        const areas = this.areas;
-
-        // Check North
-        const north = pos.x === 0 ? null : areas[pos.x - 1][pos.y];
-
-        // Check East
-        const east =
-            pos.y === areas.length - 1 ? null : areas[pos.x][pos.y + 1];
-
-        // Check South
-        const south =
-            pos.x === areas.length - 1 ? null : areas[pos.x + 1][pos.y];
-
-        // Check West
-        const west = pos.y === 0 ? null : areas[pos.x][pos.y - 1];
-
-        const surroundings: Surroundings = {
-            north: north,
-            east: east,
-            south: south,
-            west: west
-        };
-
-        return surroundings;
-    }
-
     public promptAvailableDirections(): void {
-        const surr = this.getCharacterSurroundings();
+        const surr = this.character.getCharacterSurroundings(this.areas);
         const availableDirections = [
             'You can take the following directions:',
             surr.north ? 'North' : '',
@@ -265,6 +195,18 @@ class Labyrinth {
             .filter(item => item)
             .join('\n');
         console.log(availableDirections);
+    }
+
+    // Returns a boolean to indicate if the move has been made successfully.
+    public move(direction: string): boolean {
+        if (
+            !this.character.move(this.areas, direction) ||
+            (this.monster && !this.monster.move(this.areas))
+        ) {
+            this.promptAvailableDirections();
+            return false;
+        }
+        return true;
     }
 
     public greeting(): void {
@@ -284,24 +226,6 @@ class Labyrinth {
             return true;
         }
         return false;
-    }
-
-    // Monster moves in a clockwise direction.
-    public moveMonster(): void {
-        if (!this.monster) {
-            return;
-        }
-        const newPos = this.monster.getPosition();
-        if (newPos.y > 0 && newPos.x === this.areas.length - 1) {
-            newPos.y--;
-        } else if (newPos.x > 0) {
-            newPos.x--;
-        } else if (newPos.y < this.areas.length - 1) {
-            newPos.y++;
-        } else {
-            newPos.x++;
-        }
-        this.monster.setPosition(newPos);
     }
 
     // Returns true if the character encounters the monster

@@ -42,6 +42,57 @@ class Character {
     removeItem(item) {
         this.pocket.delete(item.getName().toLocaleLowerCase());
     }
+    move(areas, direction) {
+        if (!this.validateMove(areas, direction)) {
+            return false;
+        }
+        const newPos = this.position;
+        switch (direction) {
+            case 'north':
+                newPos.x--;
+                break;
+            case 'east':
+                newPos.y++;
+                break;
+            case 'south':
+                newPos.x++;
+                break;
+            case 'west':
+                newPos.y--;
+                break;
+            default:
+                break;
+        }
+        this.position = newPos;
+        return true;
+    }
+    validateMove(areas, direction) {
+        const d = direction.toLowerCase().trim();
+        const surr = this.getCharacterSurroundings(areas);
+        if (!surr[d]) {
+            console.log('You cannot go that direction.');
+            return false;
+        }
+        return true;
+    }
+    getCharacterSurroundings(areas) {
+        const pos = this.position;
+        // Check North
+        const north = pos.x === 0 ? null : areas[pos.x - 1][pos.y];
+        // Check East
+        const east = pos.y === areas.length - 1 ? null : areas[pos.x][pos.y + 1];
+        // Check South
+        const south = pos.x === areas.length - 1 ? null : areas[pos.x + 1][pos.y];
+        // Check West
+        const west = pos.y === 0 ? null : areas[pos.x][pos.y - 1];
+        const surroundings = {
+            north: north,
+            east: east,
+            south: south,
+            west: west
+        };
+        return surroundings;
+    }
 }
 exports.default = Character;
 //# sourceMappingURL=Character.js.map
